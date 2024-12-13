@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Flask To-Do List</h1>
+
+        <!-- Add Task Form -->
+        <form action="/add" method="post">
+            <input type="text" name="task" placeholder="Enter a new task" required>
+            <select name="category">
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="School">School</option>
+            </select>
+            <input type="date" name="due_date">
+            <button type="submit">Add Task</button>
+        </form>
+
+        <!-- Display Tasks -->
+        <ul>
+            {% for task in tasks %}
+                <li style="text-decoration: {% if task.completed %}line-through{% endif %};">
+                    <strong>[{{ task.category }}]</strong> {{ task.name }}
+                    {% if task.due_date %}
+                        <em>(Due: {{ task.due_date.strftime('%Y-%m-%d') }})</em>
+                    {% endif %}
+                    {% if not task.completed %}
+                        <a href="/complete/{{ task.id }}">Mark as Completed</a>
+                    {% endif %}
+                    <a href="/delete/{{ task.id }}">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
